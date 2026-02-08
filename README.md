@@ -39,8 +39,15 @@ Ensure you have an **OpenCage API Key**. You can obtain one at [opencagedata.com
 ### 2. Environment Variables
 Create a `.env` file in the root directory:
 ```env
-SECRET_KEY=your_secure_secret_key
-OPENCAGE_API_KEY=your_opencage_api_key
+SECRET_KEY=
+OPENCAGE_API_KEY=
+FIREBASE_API_KEY=
+FIREBASE_AUTH_DOMAIN=
+FIREBASE_PROJECT_ID=
+FIREBASE_STORAGE_BUCKET=
+FIREBASE_MESSAGING_SENDER_ID=
+FIREBASE_APP_ID=
+FIREBASE_MEASUREMENT_ID=
 ```
 
 ### 3. Installation
@@ -75,3 +82,4 @@ Access the terminal via: `http://localhost:8000`
 ---
 **Developed by [Pragyan Kumar](https://github.com/Pragyan2004)**
 *Advancing Geospatial Intelligence.*
+
