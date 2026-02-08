@@ -6,5 +6,6 @@ opencage
 folium
 python-dotenv
 SQLAlchemy
-uvicorn
 werkzeug
+uvicorn
+gunicorn

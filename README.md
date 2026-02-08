@@ -57,6 +57,7 @@ The application automatically handles database creation on the first run.
 ```bash
 python app.py
 ```
+
 Access the terminal via: `http://localhost:8000`
 
 ## 📖 Usage Guide
