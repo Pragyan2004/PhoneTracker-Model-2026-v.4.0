@@ -116,8 +116,8 @@
                                     title="View Detailed Intelligence">
                                     DETAILS
                                 </a>
-                                <button onclick="deleteRecord({{ record.id }})"
-                                    class="btn btn-sm bg-danger bg-opacity-10 text-danger border-0 px-3 rounded-pill fw-bold"
+                                <button data-id="{{ record.id }}"
+                                    class="btn-purge btn btn-sm bg-danger bg-opacity-10 text-danger border-0 px-3 rounded-pill fw-bold"
                                     title="Purge Intelligence Packet">
                                     PURGE
                                 </button>
@@ -126,7 +126,7 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="5" class="py-5 text-center text-muted">
+                        <td colspan="6" class="py-5 text-center text-muted">
                             <i class="fas fa-folder-open fa-3x mb-3 opacity-10"></i>
                             <p>No intercepts discovered in current archive.</p>
                         </td>
@@ -168,55 +168,73 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Data for export without confusing the JS parser -->
+<script id="history-json" type="application/json">
+    [
+        {% for record in history %}
+        {
+            "phone_number": "{{ record.phone_number }}",
+            "location": "{{ record.location }}",
+            "carrier": "{{ record.carrier }}",
+            "latitude": {{ record.latitude or 0 }},
+            "longitude": {{ record.longitude or 0 }},
+            "searched_at": "{{ record.searched_at }}"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+</script>
+
 <script>
-    function exportArchive() {
-        const history = [
-            {% for record in history %}
-    {
-        phone_number: "{{ record.phone_number }}",
-            location: "{{ record.location }}",
-                carrier: "{{ record.carrier }}",
-                    latitude: { { record.latitude or 0 } },
-        longitude: { { record.longitude or 0 } },
-        searched_at: "{{ record.searched_at }}"
-    } {% if not loop.last %}, {% endif %}
-    {% endfor %}
-        ];
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
-    const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "archive_log_" + new Date().getTime() + ".json");
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-    }
+    // Mission Log Operations
+    $(document).ready(function () {
+        // Purge intelligence packet
+        $('.btn-purge').on('click', function (e) {
+            const btn = $(this);
+            const id = btn.data('id');
 
-    function deleteRecord(id) {
-        if (confirm('CRITICAL: Are you sure you want to permanently delete this intelligence packet?')) {
-            const btn = event.target.closest('button');
-            const originalHtml = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = 'PURGING...';
+            if (confirm('CRITICAL: Are you sure you want to permanently delete this intelligence packet?')) {
+                const originalHtml = btn.html();
+                btn.prop('disabled', true);
+                btn.html('PURGING...');
 
-            $.ajax({
-                url: '/delete-history/' + id,
-                method: 'POST',
-                success: function (res) {
-                    if (res.success) {
-                        location.reload();
-                    } else {
-                        btn.disabled = false;
-                        btn.innerHTML = originalHtml;
-                        alert('FAILURE: Could not purge record from archive.');
+                $.ajax({
+                    url: '/delete-history/' + id,
+                    method: 'POST',
+                    success: function (res) {
+                        if (res.success) {
+                            location.reload();
+                        } else {
+                            btn.prop('disabled', false);
+                            btn.html(originalHtml);
+                            alert('FAILURE: Could not purge record from archive.');
+                        }
+                    },
+                    error: function () {
+                        btn.prop('disabled', false);
+                        btn.html(originalHtml);
+                        alert('FAILURE: Network Relay Error.');
                     }
-                },
-                error: function () {
-                    btn.disabled = false;
-                    btn.innerHTML = originalHtml;
-                    alert('FAILURE: Network Relay Error.');
-                }
-            });
+                });
+            }
+        });
+    });
+
+    function exportArchive() {
+        const historyData = document.getElementById('history-json').textContent;
+        const history = JSON.parse(historyData);
+
+        if (history.length === 0) {
+            alert("No data available to export.");
+            return;
         }
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "archive_log_" + new Date().getTime() + ".json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
     }
 </script>
 {% endblock %}
