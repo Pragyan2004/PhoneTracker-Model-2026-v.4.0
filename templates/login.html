@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}Identify Operator | PhoneTracker 2026{% endblock %}
+
+{% block content %}
+<div class="container py-5 min-vh-75 d-flex align-items-center justify-content-center">
+    <div class="card-glass p-1 p-md-4 shadow-2xl" style="max-width: 480px; width: 100%;">
+        <div class="p-4">
+            <div class="text-center mb-5">
+                <div class="pulse-ring mx-auto mb-4"
+                    style="animation-duration: 3s; border-color: var(--primary-color); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-fingerprint fa-2x text-primary"></i>
+                </div>
+                <h2 class="fw-bold gradient-text">OPERATOR IDENTITY</h2>
+                <p class="text-muted small ls-1">ESTABLISH SECURE LINK TO CORE DATABASE</p>
+            </div>
+
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="form-label text-muted small fw-bold mb-2">OPERATOR_ID</label>
+                    <div class="custom-input-group px-3">
+                        <i class="fas fa-id-card-clip text-primary opacity-50"></i>
+                        <input type="text" name="username" class="form-control custom-input"
+                            placeholder="Enter Username" required>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label class="form-label text-muted small fw-bold mb-2">CRYPTOGRAPHIC_KEY</label>
+                    <div class="custom-input-group px-3">
+                        <i class="fas fa-vault text-primary opacity-50"></i>
+                        <input type="password" name="password" class="form-control custom-input" placeholder="••••••••"
+                            required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-3 mb-4">
+                    DECRYPT & CONNECT
+                </button>
+
+                <div class="text-center">
+                    <p class="text-muted small">NO ACTIVE CLEARANCE? <a href="{{ url_for('register') }}"
+                            class="text-primary text-decoration-none fw-bold">ENROLL HERE</a></p>
+                </div>
+            </form>
+
+            <div class="mt-4 pt-4 border-top border-dark border-opacity-5 text-center">
+                <p class="text-muted mb-0" style="font-size: 0.65rem; letter-spacing: 0.05em;">WARNING: AUTHORIZED
+                    ACCESS ONLY. ALL SESSIONS ARE LOGGED.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

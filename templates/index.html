@@ -1,0 +1,268 @@
+{% extends "layout.html" %}
+
+{% block title %}Terminal Access | PhoneTracker 2026{% endblock %}
+
+{% block content %}
+<div class="container py-4 py-md-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5 pb-lg-5 fade-in-up">
+        <div class="col-lg-7 mb-5 mb-lg-0">
+            <h6 class="text-primary text-uppercase fw-bold ls-2 mb-3" style="font-size: 0.8rem;">Geospatial Analytics
+                Division</h6>
+            <h1 class="display-3 fw-bold mb-4" style="line-height: 1.1;">Professional System <span
+                    class="text-primary-color">v4.0</span></h1>
+            <p class="lead text-secondary mb-5 opacity-90" style="max-width: 600px;">Direct connection to global network
+                infrastructures. Securely resolve identifiers into structured geospatial data packets.</p>
+            <div class="d-flex flex-wrap gap-4">
+                <div class="d-flex align-items-center">
+                    <div class="icon-sm rounded-circle bg-primary bg-opacity-10 text-primary p-2 me-3">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <span class="small text-muted fw-bold ls-1">CORE 2026</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="icon-sm rounded-circle bg-success bg-opacity-10 text-success p-2 me-3">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <span class="small text-muted fw-bold ls-1">AES-512</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="icon-sm rounded-circle bg-warning bg-opacity-10 text-warning p-2 me-3">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <span class="small text-muted fw-bold ls-1">99% PRECISION</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 text-center px-lg-5">
+            <div class="position-relative d-inline-block float-element">
+                <div class="pulse-ring bg-primary opacity-20" style="width: 350px; height: 350px;"></div>
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1472&auto=format&fit=crop"
+                    class="img-fluid rounded-circle shadow-2xl img-glow position-relative"
+                    style="width: 300px; height: 300px; object-fit: cover; border: 4px solid var(--glass-border);"
+                    alt="System Hologram">
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Terminal Row -->
+    <div class="row g-5">
+        <!-- Tracker Terminal Card -->
+        <div class="col-lg-6">
+            <div class="card-glass p-0 shadow-2xl scan-effect border-0">
+                <div
+                    class="p-4 border-bottom border-white border-opacity-5 d-flex justify-content-between align-items-center bg-white bg-opacity-5">
+                    <h5 class="fw-bold mb-0 ls-1">ANALYTICS ENGINE</h5>
+                    <div class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-1"
+                        style="font-size: 0.6rem;">STATUS: ONLINE</div>
+                </div>
+                <div class="p-4">
+                    {% if current_user.is_authenticated %}
+                    <form id="trackForm" class="mb-4">
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-3 ls-1">IDENTIFIER INPUT
+                                (E.164)</label>
+                            <div class="custom-input-group d-flex align-items-center px-3 bg-light">
+                                <i class="fas fa-search text-primary opacity-70"></i>
+                                <input type="tel" name="phone_number" id="phoneNumber" class="form-control custom-input"
+                                    placeholder="+1 202 555 0123" required autocomplete="off">
+                                <span id="isValidIndicator" class="ms-2"></span>
+                            </div>
+                            <div id="numberMeta" class="mt-2 ps-1"></div>
+                        </div>
+
+                        <button type="submit" id="trackBtn"
+                            class="btn btn-primary w-100 py-3 d-flex align-items-center justify-content-center shadow-lg rounded-3">
+                            <i class="fas fa-microchip me-2"></i>
+                            <span class="fw-bold">EXECUTE ANALYTICS</span>
+                            <div class="spinner-border spinner-border-sm d-none ms-2" id="trackSpinner"></div>
+                        </button>
+                    </form>
+
+                    <!-- Advanced System Logs -->
+                    <div id="terminalLog"
+                        class="bg-light rounded-4 p-3 mb-4 font-monospace d-none border border-primary border-opacity-10"
+                        style="font-size: 0.7rem; height: 160px; overflow-y: auto;">
+                        <div class="text-muted opacity-50 mb-1">SECURE_CHANNEL_INIT...</div>
+                    </div>
+
+                    <!-- Result Panel -->
+                    <div id="trackResult" class="d-none animate-fade-in">
+                        <div class="result-summary">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div
+                                        class="result-item p-3 border border-primary border-opacity-10 rounded-4 bg-light">
+                                        <span class="result-label mb-1">RESOLUTION</span>
+                                        <span class="result-value text-dark fw-bold" id="resLocation">Scanning...</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div
+                                        class="result-item p-3 border border-primary border-opacity-10 rounded-4 bg-light">
+                                        <span class="result-label mb-1">CARRIER UNIT</span>
+                                        <span class="result-value text-primary fw-bold" id="resCarrier">Unknown</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div
+                                        class="result-item p-3 border border-primary border-opacity-10 rounded-4 bg-light">
+                                        <span class="result-label mb-1">IDENTITY TYPE</span>
+                                        <span class="result-value text-success fw-bold" id="resType">Mobile</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div
+                                        class="result-item p-3 border border-primary border-opacity-10 rounded-4 bg-light">
+                                        <span class="result-label mb-1">CHRONO-ID</span>
+                                        <span class="result-value text-warning fw-bold" id="resTime">UTC</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <div class="icon-lg bg-primary bg-opacity-10 text-primary-neon p-4 rounded-circle mx-auto mb-4"
+                            style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-lock fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">ACCESS DENIED</h4>
+                        <p class="text-muted small mb-5 px-4">Operator authentication is required to access the
+                            geospatial interception gateway.</p>
+                        <a href="{{ url_for('login') }}" class="btn btn-primary-custom px-5 py-3 w-100 mb-3">IDENTIFY
+                            OPERATOR</a>
+                        <p class="small text-muted">NEW CLEARANCE? <a href="{{ url_for('register') }}"
+                                class="text-primary text-decoration-none fw-bold">ENROLL HERE</a></p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Geospatial Visualization Card -->
+        <div class="col-lg-6">
+            <div class="card-glass p-0 h-100 shadow-2xl scan-effect border-0">
+                <div
+                    class="p-4 border-bottom border-white border-opacity-5 d-flex justify-content-between align-items-center bg-white bg-opacity-5">
+                    <h5 class="fw-bold mb-0 ls-1">GEO-VISUALIZER</h5>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="dot bg-success" style="width: 8px; height: 8px;"></div>
+                        <span class="text-muted small font-monospace" style="font-size: 0.6rem;">LIVE_GRID</span>
+                    </div>
+                </div>
+                <div class="p-0 position-relative h-100" style="min-height: 450px;">
+                    <div id="mapPlaceholder"
+                        class="h-100 d-flex flex-column align-items-center justify-content-center text-center p-5 bg-light">
+                        <i class="fas fa-satellite fa-4x text-muted opacity-10 mb-4 float-element"></i>
+                        <h5 class="text-muted fw-bold ls-2">WAITING FOR TARGET DATA</h5>
+                        <p class="text-muted small px-4">Initialize tracking to project geospatial coordinates onto the
+                            dark matter grid.</p>
+                    </div>
+                    <div id="mapDisplay" class="h-100 d-none">
+                        <!-- Folium Map Injected Here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        const phoneInput = $('#phoneNumber');
+        const indicator = $('#isValidIndicator');
+        const meta = $('#numberMeta');
+        const terminalLog = $('#terminalLog');
+
+        function addLog(text, type = 'info') {
+            const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const colorClass = type === 'error' ? 'text-danger' : (type === 'success' ? 'text-success' : 'text-primary');
+            const entry = $(`<div class="mb-1"><span class="opacity-50">[${time}]</span> <span class="${colorClass}">${text}</span></div>`);
+            terminalLog.append(entry).scrollTop(terminalLog[0].scrollHeight);
+        }
+
+        phoneInput.on('input', function () {
+            const number = $(this).val();
+            if (number.length > 5) {
+                $.ajax({
+                    url: '/api/validate-number',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ number: number }),
+                    success: function (res) {
+                        if (res.valid) {
+                            indicator.html('<i class="fas fa-circle-check text-success"></i>');
+                            meta.html('<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" style="font-size: 0.6rem;">SYNCHRONIZED FORMAT</span>');
+                        } else {
+                            indicator.html('<i class="fas fa-triangle-exclamation text-warning"></i>');
+                            meta.html('<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25" style="font-size: 0.6rem;">FORMAT DEVIATION</span>');
+                        }
+                    }
+                });
+            } else {
+                indicator.empty();
+                meta.empty();
+            }
+        });
+
+        $('#trackForm').on('submit', function (e) {
+            e.preventDefault();
+            const btn = $('#trackBtn');
+            const spinner = $('#trackSpinner');
+            const resultPanel = $('#trackResult');
+            const mapPlaceholder = $('#mapPlaceholder');
+            const mapDisplay = $('#mapDisplay');
+
+            // Reset UI
+            btn.prop('disabled', true);
+            spinner.removeClass('d-none');
+            resultPanel.addClass('d-none');
+            terminalLog.removeClass('d-none').empty();
+
+            // Sequence of Logs
+            addLog("INITIALIZING HANDSHAKE...");
+            setTimeout(() => addLog("UPLINK SYNC: 100%"), 400);
+            setTimeout(() => addLog("DECRYPTING CARRIER MESH...", "info"), 800);
+            setTimeout(() => addLog("INTERCEPTING SIGNAL...", "info"), 1200);
+
+            $.ajax({
+                url: '/track',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function (res) {
+                    setTimeout(() => {
+                        addLog("PACKET RECEIVED FROM GATEWAY", "success");
+                        addLog("COORDINATES RESOLVED: " + res.latitude + ", " + res.longitude, "success");
+
+                        $('#resLocation').text(res.location);
+                        $('#resCarrier').text(res.carrier);
+                        $('#resType').text(res.line_type);
+                        $('#resTime').text(res.timezone);
+
+                        mapPlaceholder.addClass('d-none');
+                        mapDisplay.removeClass('d-none').html(res.map_html);
+                        resultPanel.removeClass('d-none');
+
+                        btn.prop('disabled', false);
+                        spinner.addClass('d-none');
+                    }, 2000);
+                },
+                error: function (xhr) {
+                    setTimeout(() => {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.error : 'Connection synchronization failed.';
+                        addLog("CRITICAL ERROR: " + errorMsg, "error");
+                        addLog("REBOOTING UPLINK RELAY...", "error");
+
+                        btn.prop('disabled', false);
+                        spinner.addClass('d-none');
+                        alert('TRACKING FAILURE: ' + errorMsg);
+                    }, 1500);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

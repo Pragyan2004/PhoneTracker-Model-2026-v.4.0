@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block title %}Operational Support | PhoneTracker 2026{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-5 align-items-center">
+        <div class="col-lg-6 fade-in-up">
+            <h6 class="text-primary text-uppercase fw-bold ls-2 mb-2">Secure Communications</h6>
+            <h1 class="display-4 fw-bold mb-4 gradient-text">Contact Uplink</h1>
+            <p class="lead text-secondary mb-5">Need custom tracking solutions, API access, or emergency data recovery?
+                Open a secure channel with our technicians.</p>
+
+            <div class="card-glass p-4 border-0 bg-light mb-4">
+                <div class="d-flex align-items-center gap-4">
+                    <div class="icon-lg rounded-4 bg-primary bg-opacity-10 p-3 text-primary">
+                        <i class="fas fa-satellite fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-1 text-dark">Direct HQ Relay</h5>
+                        <p class="text-muted small mb-0">geospatial-labs@secure-relay.io</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-glass p-4 border-0 bg-light">
+                <div class="d-flex align-items-center gap-4">
+                    <div class="icon-lg rounded-4 bg-accent-color bg-opacity-10 p-3 text-accent-color">
+                        <i class="fas fa-tower-broadcast fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-1 text-dark">Emergency Frequency</h5>
+                        <p class="text-muted small mb-0">+1 (202) 2026-GEO-UNIT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card-glass p-1 p-md-4 shadow-2xl scan-effect">
+                <div class="p-4">
+                    <h4 class="fw-bold mb-5 text-dark">TRANSMIT PACKET</h4>
+                    <form>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold">OPERATIVE_ID</label>
+                            <div class="custom-input-group px-3">
+                                <input type="text" class="form-control custom-input" placeholder="Alias or ID">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold">SUBJECT_HEADER</label>
+                            <div class="custom-input-group px-3">
+                                <select
+                                    class="form-select custom-input border-0 bg-transparent text-dark focus-none shadow-none">
+                                    <option value="api">API Synchronization</option>
+                                    <option value="billing">Credit Restoration</option>
+                                    <option value="bug">Terminal Malfunction</option>
+                                    <option value="other">General Intel</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label text-muted small fw-bold">ENCRYPT_MESSAGE</label>
+                            <div class="custom-input-group p-3">
+                                <textarea class="form-control custom-input border-0 bg-transparent text-dark" rows="4"
+                                    placeholder="Enter your encrypted message..."></textarea>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary-custom w-100 py-3 mb-2">INITIALIZE UPLINK</button>
+                        <p class="text-center text-muted m-0" style="font-size: 0.6rem;">PGP Key ID: 0x82A1B903 - RSA
+                            4096bit</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

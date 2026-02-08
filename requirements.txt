@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+phonenumbers
+opencage
+folium
+python-dotenv
+SQLAlchemy
+werkzeug

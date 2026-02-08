@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block title %}Enroll Operator | PhoneTracker 2026{% endblock %}
+
+{% block content %}
+<div class="container py-5 min-vh-75 d-flex align-items-center justify-content-center">
+    <div class="card-glass p-1 p-md-4 shadow-2xl" style="max-width: 550px; width: 100%;">
+        <div class="p-4">
+            <div class="text-center mb-5">
+                <div class="pulse-ring mx-auto mb-4"
+                    style="animation-duration: 4s; border-color: var(--primary-color); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user-plus fa-2x text-primary"></i>
+                </div>
+                <h2 class="fw-bold gradient-text">OPERATIVE ENROLLMENT</h2>
+                <p class="text-muted small ls-1">PROVISION NEW CLEARANCE CREDENTIALS</p>
+            </div>
+
+            <form method="POST">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold mb-2">OPERATIVE_NAME</label>
+                        <div class="custom-input-group px-3">
+                            <input type="text" name="username" class="form-control custom-input"
+                                placeholder="User Alias" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold mb-2">EMAIL_COMMS</label>
+                        <div class="custom-input-group px-3">
+                            <input type="email" name="email" class="form-control custom-input"
+                                placeholder="intel@domain.com" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-muted small fw-bold mb-2">SECURE_PASSPHRASE</label>
+                    <div class="custom-input-group px-3">
+                        <input type="password" name="password" class="form-control custom-input" placeholder="••••••••"
+                            required>
+                    </div>
+                </div>
+
+                <div class="mb-5 form-check ms-1">
+                    <input type="checkbox" class="form-check-input border-primary" id="terms" required>
+                    <label class="form-check-label text-muted small" for="terms">
+                        I ACCEPT DIRECTIVE 2026-X AND <a href="#" class="text-primary text-decoration-none fw-bold"
+                            data-bs-toggle="modal" data-bs-target="#termsModal">USAGE PROTOCOLS</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-3 mb-4">
+                    EXECUTE ENROLLMENT
+                </button>
+
+                <div class="text-center">
+                    <p class="text-muted small">CLEARANCE ALREADY ISSUED? <a href="{{ url_for('login') }}"
+                            class="text-primary text-decoration-none fw-bold">SIGN IN</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Usage Protocol Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-glass border-primary border-opacity-10 text-dark">
+            <div class="modal-header border-dark border-opacity-10">
+                <h5 class="modal-title fw-bold text-dark">USAGE PROTOCOL v4.1</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-muted small lh-lg">
+                <p>By enrolling, you certify that:</p>
+                <ul>
+                    <li>Tracking targets will only be initialized for verified OSINT research.</li>
+                    <li>No unauthorized surveillance of high-value targets is permitted.</li>
+                    <li>Data logs created in this terminal are stored in your encrypted archive.</li>
+                    <li>Misuse of geospatial resolution tools leads to immediate clearance revocation.</li>
+                </ul>
+            </div>
+            <div class="modal-footer border-dark border-opacity-10">
+                <button type="button" class="btn btn-primary-custom py-2 px-4 shadow-none" data-bs-dismiss="modal">I
+                    CONCUR</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

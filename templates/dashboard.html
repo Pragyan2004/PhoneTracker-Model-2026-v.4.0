@@ -1,0 +1,222 @@
+{% extends "layout.html" %}
+
+{% block title %}Secure Archive | PhoneTracker 2026{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-4">
+        <div>
+            <h6 class="text-primary-neon text-uppercase fw-bold ls-3 mb-2">Central Repository</h6>
+            <h1 class="display-5 fw-bold gradient-text mb-0">Intelligence Archive</h1>
+        </div>
+        <div class="d-flex gap-3">
+            <button onclick="exportArchive()" class="btn btn-outline-light border-white border-opacity-10 px-4">
+                <i class="fas fa-file-export me-2"></i> EXPORT PACKET
+            </button>
+            <a href="{{ url_for('home') }}" class="btn btn-primary-custom px-4">
+                <i class="fas fa-plus-circle me-2"></i> NEW MISSION
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Insights -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-3 col-md-6">
+            <div class="card-glass p-4 h-100">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted small fw-bold ls-1">INTERCEPTS</span>
+                    <i class="fas fa-signal text-primary-neon"></i>
+                </div>
+                <h2 class="fw-bold text-dark">{{ history|length }}</h2>
+                <div class="progress mt-3 bg-light" style="height: 4px;">
+                    <div class="progress-bar bg-primary" style="width: 75%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card-glass p-4 h-100">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted small fw-bold ls-1">UNIQUE OPS</span>
+                    <i class="fas fa-tower-broadcast text-secondary-neon"></i>
+                </div>
+                <h2 class="fw-bold text-dark">{{ (history|map(attribute='carrier')|unique|list|length) if history else
+                    0 }}</h2>
+                <div class="progress mt-3 bg-light" style="height: 4px;">
+                    <div class="progress-bar bg-accent-color" style="width: 45%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <div class="card-glass p-4 h-100 d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h6 class="text-muted small fw-bold ls-1 mb-2">ENCRYPTION STATUS</h6>
+                    <h5 class="fw-bold text-dark d-flex align-items-center">
+                        <i class="fas fa-shield-halved text-success me-2"></i> LEVEL 4 ACTIVE
+                    </h5>
+                    <p class="small text-muted mb-0">Identity protection active for all queries via SHA-512 salting.</p>
+                </div>
+                <div class="ms-4 d-none d-sm-block">
+                    <i class="fas fa-user-secret fa-3x opacity-10"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-glass overflow-hidden border-0 shadow-2xl">
+        <div
+            class="p-4 border-bottom border-dark border-opacity-5 bg-light d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0 text-dark">MISSION LOGS</h5>
+            <div class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 py-1 px-3">
+                LIVE_STREAM</div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead>
+                    <tr class="text-muted small uppercase">
+                        <th class="ps-4 py-3 border-0">Target Identifier</th>
+                        <th class="py-3 border-0">Geospatial Resolution</th>
+                        <th class="py-3 border-0">Node/Carrier</th>
+                        <th class="py-3 border-0">Protocol Type</th>
+                        <th class="py-3 border-0">Timestamp</th>
+                        <th class="pe-4 py-3 border-0 text-end">Intel Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in history %}
+                    <tr class="border-white border-opacity-5">
+                        <td class="ps-4 py-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-mobile-screen-button text-primary me-3"></i>
+                                <span class="fw-bold text-dark">{{ record.phone_number }}</span>
+                            </div>
+                        </td>
+                        <td class="py-4">
+                            <span class="text-secondary small">{{ record.location }}</span>
+                            <div class="small text-muted" style="font-size: 0.65rem;">COORD: {{ record.latitude|round(4)
+                                }}, {{ record.longitude|round(4) }}</div>
+                        </td>
+                        <td class="py-4">
+                            <span
+                                class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 px-3">
+                                {{ record.carrier }}
+                            </span>
+                        </td>
+                        <td class="py-4">
+                            <span class="text-dark small fw-bold text-uppercase ls-1" style="font-size: 0.7rem;">
+                                {{ record.line_type or 'UNKNOWN' }}
+                            </span>
+                        </td>
+                        <td class="py-4 text-muted small font-monospace">
+                            {{ record.searched_at.strftime('%Y-%m-%d %H:%M') }}
+                        </td>
+                        <td class="pe-4 py-4 text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{{ url_for('record_info', record_id=record.id) }}"
+                                    class="btn btn-sm bg-primary bg-opacity-10 text-primary border-0 px-3 rounded-pill fw-bold d-flex align-items-center"
+                                    title="View Detailed Intelligence">
+                                    DETAILS
+                                </a>
+                                <button onclick="deleteRecord({{ record.id }})"
+                                    class="btn btn-sm bg-danger bg-opacity-10 text-danger border-0 px-3 rounded-pill fw-bold"
+                                    title="Purge Intelligence Packet">
+                                    PURGE
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="py-5 text-center text-muted">
+                            <i class="fas fa-folder-open fa-3x mb-3 opacity-10"></i>
+                            <p>No intercepts discovered in current archive.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Metadata Detail Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-glass border-primary border-opacity-10 text-dark">
+            <div class="modal-header border-dark border-opacity-10">
+                <h5 class="modal-title fw-bold text-dark d-flex align-items-center">
+                    <i class="fas fa-database text-primary me-2"></i> RECORD_METADATA
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4" id="modalBody">
+                <!-- Data injected via JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-white:hover {
+        color: var(--primary-color) !important;
+        transform: scale(1.1);
+    }
+
+    .table-hover tbody tr:hover {
+        background: rgba(37, 99, 235, 0.02) !important;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function exportArchive() {
+        const history = [
+            {% for record in history %}
+    {
+        phone_number: "{{ record.phone_number }}",
+            location: "{{ record.location }}",
+                carrier: "{{ record.carrier }}",
+                    latitude: { { record.latitude or 0 } },
+        longitude: { { record.longitude or 0 } },
+        searched_at: "{{ record.searched_at }}"
+    } {% if not loop.last %}, {% endif %}
+    {% endfor %}
+        ];
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "archive_log_" + new Date().getTime() + ".json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+    }
+
+    function deleteRecord(id) {
+        if (confirm('CRITICAL: Are you sure you want to permanently delete this intelligence packet?')) {
+            const btn = event.target.closest('button');
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'PURGING...';
+
+            $.ajax({
+                url: '/delete-history/' + id,
+                method: 'POST',
+                success: function (res) {
+                    if (res.success) {
+                        location.reload();
+                    } else {
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                        alert('FAILURE: Could not purge record from archive.');
+                    }
+                },
+                error: function () {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                    alert('FAILURE: Network Relay Error.');
+                }
+            });
+        }
+    }
+</script>
+{% endblock %}

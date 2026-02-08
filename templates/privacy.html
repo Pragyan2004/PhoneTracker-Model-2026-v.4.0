@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}Privacy Policy - PhoneTracker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card-glass p-5 border-0">
+                <h1 class="fw-bold mb-2 gradient-text">Privacy Policy</h1>
+                <p class="text-muted small uppercase ls-1 mb-5">Last Updated: February 2026</p>
+
+                <section class="mb-5">
+                    <h5 class="fw-bold text-dark mb-3 d-flex align-items-center">
+                        <span class="badge bg-primary bg-opacity-10 text-primary me-2">01</span> Information Collection
+                    </h5>
+                    <p class="text-secondary small lh-lg">At PhoneTracker, we collect minimal operational data to
+                        provide our geospatial services:</p>
+                    <ul class="text-secondary small lh-lg">
+                        <li><strong class="text-dark">Account Protocol:</strong> Username, email, and cryptographically
+                            hashed credentials.</li>
+                        <li><strong class="text-dark">Intercept History:</strong> Global identifiers, resolved
+                            coordinates, and chrono-timestamps.</li>
+                        <li><strong class="text-dark">Metadata:</strong> Technical headers and routing information for
+                            security synchronization.</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h5 class="fw-bold text-dark mb-3 d-flex align-items-center">
+                        <span class="badge bg-primary bg-opacity-10 text-primary me-2">02</span> Data Utilization
+                    </h5>
+                    <p class="text-secondary small lh-lg">Your intelligence data is utilized exclusively for:</p>
+                    <ul class="text-secondary small lh-lg">
+                        <li>Maintaining your personal archive and intercept history.</li>
+                        <li>Optimizing the accuracy of our triangulation algorithms.</li>
+                        <li>Hardening the platform against unauthorized access or misuse.</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h4 class="fw-bold mb-3">3. Data Sharing</h4>
+                    <p>We do not sell your personal data. We only share data with third-party service providers (like
+                        OpenCage) for the sole purpose of fulfillment of the tracking request, and with law enforcement
+                        if required by valid legal process.</p>
+                </section>
+
+                <section class="mb-5">
+                    <h4 class="fw-bold mb-3">4. Security</h4>
+                    <p>We implement industry-standard encryption for both data in transit and data at rest. Your search
+                        history is uniquely tied to your encrypted user ID.</p>
+                </section>
+
+                <div class="p-4 rounded-4 bg-primary bg-opacity-5 border border-primary border-opacity-10">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-sm bg-primary text-white rounded-circle p-2 me-3">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">Support Uplink</h6>
+                            <p class="small text-muted mb-0">For data deletion requests or protocol inquiries, contact
+                                our legal division at <span
+                                    class="text-primary fw-bold">privacy@geospatial-labs.io</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

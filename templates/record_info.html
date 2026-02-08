@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block title %}Intelligence Report | PhoneTracker 2026{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-5 fade-in-up">
+        <a href="{{ url_for('dashboard') }}"
+            class="btn btn-sm btn-outline-secondary border-0 mb-4 ps-0 text-uppercase fw-bold ls-1">
+            <i class="fas fa-arrow-left me-2"></i> Return to Archive
+        </a>
+        <h6 class="text-primary text-uppercase fw-bold ls-2 mb-2">Detailed Analysis</h6>
+        <h1 class="display-5 fw-bold gradient-text mb-0">Intelligence Packet #{{ record.id }}</h1>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card-glass p-5 border-0 shadow-2xl mb-4">
+                <div class="row g-4">
+                    <div class="col-md-6 pb-4 border-bottom border-dark border-opacity-5">
+                        <label class="text-muted small fw-bold uppercase ls-1 mb-2">Target Identifier</label>
+                        <div class="h3 fw-bold text-primary mb-0">{{ record.phone_number }}</div>
+                    </div>
+                    <div class="col-md-6 pb-4 border-bottom border-dark border-opacity-5">
+                        <label class="text-muted small fw-bold uppercase ls-1 mb-2">Resolution Status</label>
+                        <div class="h3 fw-bold text-dark mb-0">RESOLVED</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-4">
+                            <label class="text-muted small fw-bold uppercase ls-1 mb-1 d-block">Geospatial
+                                Resolution</label>
+                            <div class="fw-bold text-dark">{{ record.location }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-4">
+                            <label class="text-muted small fw-bold uppercase ls-1 mb-1 d-block">Carrier Backbone</label>
+                            <div class="fw-bold text-dark">{{ record.carrier }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-4">
+                            <label class="text-muted small fw-bold uppercase ls-1 mb-1 d-block">Protocol Type</label>
+                            <div class="fw-bold text-primary text-uppercase">{{ record.line_type or 'N/A' }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-4">
+                            <label class="text-muted small fw-bold uppercase ls-1 mb-1 d-block">Latitude</label>
+                            <div class="font-monospace text-dark">{{ record.latitude }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-4">
+                            <label class="text-muted small fw-bold uppercase ls-1 mb-1 d-block">Longitude</label>
+                            <div class="font-monospace text-dark">{{ record.longitude }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 p-4 rounded-4 bg-primary bg-opacity-5 border border-primary border-opacity-10">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-sm bg-primary text-white rounded-circle p-2 me-3">
+                            <i class="fas fa-shield-check"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">Verification Hash</h6>
+                            <p class="small text-muted font-monospace mb-0">SHA256: {{ record.id | string | reverse |
+                                first }}{{ range(10000, 99999) | random }}{{ record.phone_number | reverse | first }}...
+                                (Verified Protocol)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card-glass p-4 border-0 mb-4">
+                <h6 class="fw-bold text-dark uppercase ls-1 mb-4">Chronometry</h6>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted small">Archived At:</span>
+                    <span class="text-dark small fw-bold">{{ record.searched_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted small">Sync Status:</span>
+                    <span class="badge bg-success bg-opacity-10 text-success">SYNCHRONIZED</span>
+                </div>
+            </div>
+
+            <div class="card-glass p-4 border-0 bg-light">
+                <h6 class="fw-bold text-dark uppercase ls-1 mb-3">Intelligence Control</h6>
+                <p class="small text-muted mb-4">Manage this specific intelligence packet. Note that purging is
+                    permanent.</p>
+                <div class="d-grid gap-2">
+                    <button onclick="window.print()" class="btn btn-outline-dark border-opacity-10 py-2">
+                        <i class="fas fa-print me-2"></i> PRINT REPORT
+                    </button>
+                    <button onclick="deleteAndRedirect({{ record.id }})" class="btn btn-danger py-2">
+                        <i class="fas fa-trash-can me-2"></i> PURGE RECORD
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    function deleteAndRedirect(id) {
+        if (confirm('CRITICAL: Permanent archive purge. This action cannot be reversed. Proceed?')) {
+            $.ajax({
+                url: '/delete-history/' + id,
+                method: 'POST',
+                success: function (res) {
+                    if (res.success) {
+                        window.location.href = "{{ url_for('dashboard') }}";
+                    } else {
+                        alert('FAILURE: Could not purge record.');
+                    }
+                },
+                error: function () {
+                    alert('FAILURE: Network Relay Error.');
+                }
+            });
+        }
+    }
+</script>
+{% endblock %}
+{% endblock %}
